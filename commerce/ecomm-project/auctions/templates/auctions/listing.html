@@ -1,0 +1,91 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+                {% if creator == False %}
+                    {% if user.is_authenticated and exist == True and item.active == True %}
+                            <form method="post" action="" id="form" onkeydown="return event.key != 'Enter';" >
+                                {% csrf_token %}
+                                <button type="submit" name="btnform1" class="like" attr_id = {{item.id}} action_url="{% url 'listing' item.id%}">
+                                Remove from in wishlist
+                                </button>
+                            </form>
+                                {% endif %}
+                                {% if user.is_authenticated and exist == False  and item.active == True %}
+                                <form method="post" action="" id="form" onkeydown="return event.key != 'Enter';" >
+                                    {% csrf_token %}
+                                <button type="submit" name="btnform1" class="like" attr_id = {{item.id}} action_url="{% url 'listing' item.id%}">
+                                    Add to wishlist
+                                </button>
+                                </form>
+                                {% endif %}
+
+                            </form>
+                    <h2>{{ item.title }}</h2>
+                    <h3>Host : {{item.host}}</h3>
+                    <h3>Category : {{item.category}}</h3>
+
+                    <p>{{item.description}}</p>
+                    <strong> current price :  {{ item.bid.price  }}</strong>
+                    {% if user.is_authenticated and item.active == True %}
+                    
+                    <form method="post" action="">
+                        {% csrf_token %}
+                        <label for="bid"></label>
+                        <input type="number" required name="bid"/>
+                        <button type="submit" required  name="btnform2">Submit bid</button>
+                    </form>
+                    {% endif %}
+
+                    {% if item.image != "" %}
+                    <img src="{{ item.image }}"alt="">
+                    {% endif %}
+
+                    {% if item.bid.user == user and item.active == False%}
+                    <h1>YOU WON THE AUCTION</h1>
+                    {% endif %}
+
+                    {% endif %}
+                    
+                    {% if creator == True %}
+                    {% if user.is_authenticated and item.active == True %}
+                    <form method="post" action="">
+                        {% csrf_token %}
+                        <button type="submit" required  name="close">Close listing</button>
+                    </form>
+                    {% endif %}
+                    
+                    {% if user.is_authenticated and item.active == False %}
+                    <form method="post" action="">
+                        {% csrf_token %}
+                        <button type="submit" required  name="open">Open listing</button>
+                    </form>
+                    {% endif %}
+                    
+                    <h2>{{ item.title }}</h2>
+                    <h3>Host : {{item.host}}</h3>
+                    <h3>Category : {{item.category}}</h3>
+
+                    <p>{{item.description}}</p>
+                    <strong> current price :  {{ item.bid.price  }}</strong>
+
+
+
+                    {% endif %}
+
+
+{{item.created}}
+{% for comment in comments %}
+    <h3>{{comment.user.username}}</h3>
+    <p>{{comment.body}}</p>
+{% endfor %}
+{% if user.is_authenticated%}
+
+
+                    <form method="post" action="" onkeydown="return event.key != 'Enter';">
+                        {% csrf_token %}
+                        <label for="body"></label>
+                        <input type="text" required name="body"/>
+                        <button type="submit" required  name="comment">comment</button>
+                    </form>
+                {% endif %}
+{% endblock %}

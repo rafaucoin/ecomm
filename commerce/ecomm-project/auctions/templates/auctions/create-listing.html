@@ -1,0 +1,21 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2>Active Listings</h2>
+    {% if exist == True %}
+        <h2>Listing already exists</h2>
+{% endif %}
+    <form method="post" action="">
+          {% csrf_token %}
+        {{form.as_p}}
+        <label for="title">Title</label>
+        <input type="text" required name="title"/>
+        <label for="price">Starting bid</label>
+        <input type="number" required name="price"/>
+        <label for="description">Description</label>
+        <textarea name="description" required cols="10" rows="5"></textarea>
+        <label for="image">image</label>
+        <input type="text" name="image"/>
+        <button type="submit">Submit listing</button>
+    </form>
+{% endblock %}
